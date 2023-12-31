@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const PostsPage = async () => {
   // const res = await fetch("http://localhost:5000/posts");
   // const posts = await res.json();
@@ -8,11 +10,17 @@ const PostsPage = async () => {
   // });
 
   /* ISR--> Inremental Site Generation */
+  // const res = await fetch("http://localhost:5000/posts",{
+  //   next: {
+  //     revalidate: 5, // only data (fakeDB) that has changed will be revalidated
+  //   }
+  // });
+
+  /* SSR--> Server Site rendering */
   const res = await fetch("http://localhost:5000/posts",{
-    next: {
-      revalidate: 5,
-    }
+  cache: 'no-store'
   });
+
   const posts = await res.json();
   // console.log(posts);
   return (
@@ -25,7 +33,9 @@ const PostsPage = async () => {
           <p>{post.description}</p>
           <p>{post.likesCount}</p>
           <div className="card-actions justify-end">
+            <Link href={`/posts/${post.id}`}>
             <button className="btn btn-primary">See More</button>
+            </Link>
           </div>
         </div>
       </div>
